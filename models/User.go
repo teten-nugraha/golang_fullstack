@@ -5,6 +5,7 @@ import (
 	"strings"
 	"html"
 	"time"
+	"log"
 
 	"github.com/badoux/checkmail"
 	"golang.org/x/crypto/bcrypt"
@@ -120,4 +121,40 @@ func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
 		return &User{}, errors.New("User not Found")
 	}
 	return u, err
+}
+
+func (u *User) UpdateUser(db *gorm.DB, uid uint32) (*User, error) {
+
+	// To hash the password
+	err := u.BeforeSave() 
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db = db.Debug().Model(&User{}).where("id=?",uid).Take(&User{}).UpdateColumns(
+		map[string]interface{}{
+			"password": u.Password,
+			"nickname": u.Nickname,
+			"email" : u.Email,
+			"updated_at": time.Now()
+		},
+	)
+	if db.Error != nil {
+		return &User{}, db.Error
+	}
+
+	// this is the display the uodate User
+	err = db.Debug().Model(&User{}).Where("id=?", uid).Take(&u).Error 
+	if err != nil {
+		return &User{}, err
+	}
+	return u, nil
+}
+
+func (u *User) DeleteUser(db *gorm.DB, uid uint32) (int64, error) {
+	db = db.Debug().Model(&User{}).Where("id=?", uid).Take(&User{}).Delete(&User{})
+	if db.Error != nil {
+		return 0, db.Error
+	}
+	return db.RowsAffected, nil
 }
