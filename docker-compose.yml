@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  dbFullStackGolang:
+    image: mysql:5.7
+    ports:
+      - "3300:3306"
+    environment:
+      MYSQL_DATABASE: 'fullstack_api'
+      MYSQL_USER: 'golang'
+      MYSQL_PASSWORD: 'fullstack'
+      MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - my-db:/var/lib/mysql
+volumes:
+  my-db:
