@@ -7,6 +7,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
+	"github.com/teten777/golang_fullstack/api/auth"
 	"github.com/teten777/golang_fullstack/api/models"
 	"github.com/teten777/golang_fullstack/api/responses"
 	"github.com/teten777/golang_fullstack/api/utils/formaterror"

@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/teten777/golang_fullstack/api/auth"
 	"github.com/teten777/golang_fullstack/api/utils/formaterror"
 
 	"github.com/teten777/golang_fullstack/api/models"
@@ -27,7 +28,7 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user.Prepare()
-	err = user.Validate()
+	err = user.Validate("")
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
@@ -52,7 +53,7 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	responses.OK(w, http.StatusOK, users)
+	responses.JSON(w, http.StatusOK, users)
 }
 
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {

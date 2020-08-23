@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/teten777/golang_fullstack/api/auth"
 	"github.com/teten777/golang_fullstack/api/models"
 	"github.com/teten777/golang_fullstack/api/responses"
 	"github.com/teten777/golang_fullstack/api/utils/formaterror"
@@ -59,7 +60,7 @@ func (server *Server) GetPosts(w http.ResponseWriter, r *http.Request) {
 
 	posts, err := post.FindAllPosts(server.DB)
 	if err != nil {
-		responses.Error(w, http.StatusInternalServerError, err)
+		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
 	responses.JSON(w, http.StatusOK, posts)
@@ -102,7 +103,7 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 
 	// check if the posts exists
 	post := models.Post{}
-	err = server.DB.Debug().Model(models.Post{}).Where("id=?", pid).Take(&post).Find(&post)
+	err = server.DB.Debug().Model(models.Post{}).Where("id=?", pid).Take(&post).Error
 	if err != nil {
 		responses.ERROR(w, http.StatusNotFound, errors.New("Post not found"))
 		return
