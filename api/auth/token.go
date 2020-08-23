@@ -1,10 +1,13 @@
 package auth
 
 import (
+	"encoding/json"
 	"fmt"
-	"strings"
+	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -16,10 +19,10 @@ func CreateToken(user_id uint32) (string, error) {
 	claims["user_id"] = user_id
 	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(os.Getenv("API_SECRET"))])
+	return token.SignedString([]byte(os.Getenv("API_SECRET")))
 }
 
-func TokenValid(e *http.Request) error {
+func TokenValid(r *http.Request) error {
 	tokenString := ExtractToken(r)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

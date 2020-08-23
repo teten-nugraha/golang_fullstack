@@ -4,7 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/teten777/golang_fullstack/responses"
+	"github.com/teten777/golang_fullstack/api/auth"
+	"github.com/teten777/golang_fullstack/api/responses"
 )
 
 func SetMiddlewareJSON(next http.HandlerFunc) http.HandlerFunc {
